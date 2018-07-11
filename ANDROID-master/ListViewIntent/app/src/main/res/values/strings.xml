@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">ListView-Intent</string>
+    <string name="button_text">ADD</string>
+    <string name="input_name">Nom</string>
+    <string name="input_info">Meta</string>
+
+    <string name="row_title">Gmail</string>
+    <string name="row_meta">Gmail: ...@gmail.com</string>
+
+</resources>

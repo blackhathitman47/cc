@@ -1,0 +1,3 @@
+database = garage
+table = voiture
+		=> id / nom_voiture / prix / chemin

@@ -1,0 +1,18 @@
+    public TextView ress;
+    public EditText num;
+    public EditText qte;
+    public Button btn;
+
+
+        ress= findViewById(R.id.ress);
+        num= findViewById(R.id.num);
+        qte= findViewById(R.id.qte);
+
+        btn=findViewById(R.id.btn);
+        btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                double r = Double.parseDouble(num.getText().toString())*Integer.parseInt(String.valueOf(qte.getText()).toString());
+                ress.setText("" +r+"$");
+            }
+        });

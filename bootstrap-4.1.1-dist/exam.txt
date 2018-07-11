@@ -1,0 +1,35 @@
+cycle de vie d'une application : on create on start on resume on pause on stop on destroy
+---------------------------------------------------------------------------------------------
+findViewById est une méthode qui trouve la vue du fichier de ressources de mise en page associé à l'activité en cours.
+la différence entre findviewbyid et setcontentview est que setcontentview permet d'obtenir tout le layout et findviwbyid permet d'obtenir un element dans le layout 
+---------------------------------------------------------------------------------------------
+Vous avez ouvert la nouvelle activité à partir d'une autre activité avec startActivityForResult. Dans ce cas, vous pouvez simplement appeler la fonction finishActivity () à partir de votre code et cela vous ramènera à l'activité précédente.
+---------------------------------------------------------------------------------------------
+Le Manifest est un fichier que vous trouverez à la racine de votre projet sous le nom d'AndroidManifest.xml et qui vous permettra de spécifier différentes options pour vos projets
+manifest => permission de service  , main => code java(la fonctiont de l'app) , layout => desing de l'app android  
+---------------------------------------------------------------------------------------------
+linearlayout => les elemment sont placé horizontalement ou verticalement dans la meme ligne, 
+relativelayout => les elemmemts depant de parent
+---------------------------------------------------------------------------------------------
+hybride => multiplateforme html css js 
+native => app mobile une seule plateforme
+web => necisite un navigateur
+---------------------------------------------------------------------------------------------
+commande de cordova
+	installation	rpm install -g codova
+	creation	cordova create "nom d'applicaton"
+	addplatform     cordova platform "add nom de platform"
+	build		cordova build
+	execution	cordove run browser
+---------------------------------------------------------------------------------------------
+activité => 
+sevice =>
+---------------------------------------------------------------------------------------------
+un broadcast est un composant Android qui vous permet de vous enregistrer pour des événements système ou d'application. Tous les destinataires enregistrés pour un événement sont notifiés par le moteur d'exécution Android une fois que cet événement se produit.
+void onHandleIntent(Intent intent)
+les IntentService sont un type de service Android qui permet de gérer les requêtes asynchrones
+---------------------------------------------------------------------------------------------
+system builder on android studio
+---------------------------------------------------------------------------------------------
+Rôle de gradle ?
+Dans Android Studio, Gradle est un outil de construction personnalisé utilisé pour créer des paquets Android (fichiers apk) en gérant les dépendances et en fournissant une logique de construction personnalisée. Fichier APK (package d'application Android) est un fichier zip spécialement formaté qui contient. Code d'octet. Ressources (images, interface utilisateur, XML, etc.)

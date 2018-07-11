@@ -1,0 +1,305 @@
+    public TextView ress;
+    public EditText num;
+    public EditText qte;
+    public Button btn;
+
+
+        ress= findViewById(R.id.ress);
+        num= findViewById(R.id.num);
+        qte= findViewById(R.id.qte);
+
+        btn=findViewById(R.id.btn);
+        btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                double r = Double.parseDouble(num.getText().toString())*Integer.parseInt(String.valueOf(qte.getText()).toString());
+                ress.setText("" +r+"$");
+            }
+        });
+
+
+***********************************************************************************
+manifests
+<uses-permission android:name="android.permission.CALL_PHONE" />
+***********************************************************************************
+Int
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+public class Int {
+    private String title;
+    private String logo;
+    private String info;
+
+    public Int(String title, String info) {
+        this.title = title;
+        this.info = info;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public String getLogo() {
+        String email = "\\b[\\w.%-]+@[-.\\w]+\\.[A-Za-z]{2,4}\\b";
+        String phone = "\\d{10}|(?:\\d{3}-){2}\\d{4}|\\(\\d{3}\\)\\d{3}-?\\d{4}";
+
+
+        Pattern patternEmail = Pattern.compile(email);
+        Pattern patternPhone = Pattern.compile(phone);
+
+        Matcher matcherEmail = patternEmail.matcher(this.info);
+        Matcher matcherPhone = patternPhone.matcher(this.info);
+
+        if (matcherEmail.find()) {
+            this.logo = "gmail";
+        } else if (matcherPhone.find()) {
+            this.logo = "phone";
+        } else {
+            this.logo = "placeholder";
+        }
+
+        return logo;
+    }
+
+    public void setLogo(String logo) {
+        this.logo = logo;
+    }
+
+    public String getInfo() {
+        return info;
+    }
+
+    public void setInfo(String info) {
+        this.info = info;
+    }
+}
+*************************************************************************
+MainActivity
+    private EditText mInputTitle;
+    private EditText mInputMeta;
+    private Button mButtonAdd;
+    private ListView myList;
+    private myCustomAdapter myAdapter;
+    private List<Int> data;
+
+--------
+        mInputTitle = findViewById(R.id.nameInput);
+        mInputMeta = findViewById(R.id.infoInput);
+
+        myList = findViewById(R.id.myList);
+
+        mButtonAdd = findViewById(R.id.buttonAdd);
+
+        data = new ArrayList<>();
+
+        // Add data for data
+        mButtonAdd.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Int one = new Int(mInputTitle.getText().toString(), mInputMeta.getText().toString());
+                data.add(one);
+                myAdapter = new myCustomAdapter(getApplicationContext(), data);
+                myList.setAdapter(myAdapter);
+
+                Log.d("Hello", one.getLogo());
+            }
+        });
+
+        myList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Log.d("Hello", " " + data.size());
+                // When Clicked
+                // 1. Fetch the clicked item position and the data associated with it
+                // 2. Instantiate Intent depending on the "logo" value
+                // 3. Send extra with intent
+
+                Toast.makeText(getApplicationContext(), data.get(position).getInfo(), Toast.LENGTH_LONG).show();
+
+
+                if (data.get(position).getLogo() == "gmail") {
+                    // Instantiating an intent
+                    Intent mailClient = new Intent(Intent.ACTION_SENDTO);
+                    mailClient.setData(Uri.parse("mailto:")); // Only email apps should handle this
+                    // Putting extra info to send
+                    mailClient.putExtra(Intent.EXTRA_EMAIL, new String[] { data.get(position).getInfo()});
+                    // If no Activity found to handle our intent don't execute the intent
+                    if (mailClient.resolveActivity(getPackageManager()) != null) {
+                        startActivity(Intent.createChooser(mailClient, "Send mail ..."));
+                    }
+
+                } else if (data.get(position).getLogo() == "phone") {
+                    Intent intent = new Intent(Intent.ACTION_DIAL);
+                    intent.setData(Uri.parse("tel:" + data.get(position).getInfo()));
+
+                    if (intent.resolveActivity(getPackageManager()) != null) {
+                        startActivity(intent);
+                    }
+                } else {
+
+                }
+
+
+            }
+        });
+********************************************************************************
+myCustomAdapter extends BaseAdapter
+
+private Context mContext;
+    private List<Int> data;
+
+    public myCustomAdapter(Context context, List<Int> data) {
+        mContext = context;
+        this.data = data;
+    }
+
+    @Override
+    public int getCount() {
+        return data.size();
+    }
+
+    @Override
+    public Object getItem(int position) {
+        return data.get(position);
+    }
+
+    @Override
+    public long getItemId(int position) {
+        return position;
+    }
+
+    @Override
+    public View getView(int position, View convertView, ViewGroup parent) {
+        View v = View.inflate(mContext, R.layout.custom_row, null);
+
+        TextView mTitle = v.findViewById(R.id.title);
+        TextView mMeta = v.findViewById(R.id.info);
+        ImageView mLogo = v.findViewById(R.id.logo);
+
+        mTitle.setText(data.get(position).getTitle());
+        mMeta.setText(data.get(position).getInfo());
+        int resID = mContext.getResources().getIdentifier(data.get(position).getLogo(), "drawable", mContext.getPackageName());
+        mLogo.setImageResource(resID);
+
+
+        return v;
+    }
+*********************************************************************************
+activity_main
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="56dp"
+        android:orientation="horizontal">
+
+        <EditText
+            android:id="@+id/nameInput"
+            android:layout_width="136dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:ems="10"
+            android:inputType="textPersonName"
+            android:text="@string/input_name" />
+
+        <EditText
+            android:id="@+id/infoInput"
+            android:layout_width="141dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:ems="10"
+            android:inputType="textPersonName"
+            android:text="@string/input_info" />
+
+        <Button
+            android:id="@+id/buttonAdd"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="#000000"
+            android:gravity="center"
+            android:text="@string/button_text"
+            android:textColor="#ffffff"
+            android:textSize="16dp"
+            android:textStyle="bold" />
+
+    </LinearLayout>
+
+    <ListView
+        android:id="@+id/myList"
+        android:layout_width="match_parent"
+        android:layout_height="465dp"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginBottom="0dp"
+        android:layout_weight="1" />
+
+</RelativeLayout>
+***************************************************************
+custom_row
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:padding="5dp">
+
+        <ImageView
+            android:id="@+id/logo"
+            android:layout_width="100dp"
+            android:layout_height="60dp"
+            android:layout_weight="1"
+            android:padding="5dp"
+            app:srcCompat="@drawable/gmail" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="center_vertical|center"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:paddingLeft="15dp">
+
+            <TextView
+                android:id="@+id/title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/row_title"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/info"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/row_meta"
+                android:textSize="18sp" />
+        </LinearLayout>
+
+    </LinearLayout>
+</RelativeLayout>
